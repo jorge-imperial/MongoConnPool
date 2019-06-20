@@ -5,6 +5,8 @@ import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoCredential;
 import com.mongodb.MongoException;
+import com.mongodb.MongoSocketOpenException;
+import com.mongodb.MongoTimeoutException;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
@@ -33,7 +35,7 @@ public class PoolConnectionSettingsTest {
       public void apply(final Document document) {
         System.out.println(document.toJson());
 
-        /**  Sleep to simulate time processing per document.
+        /*  Sleep to simulate time processing per document.
         try {
           Thread.sleep(1); // <---
         } catch (InterruptedException e) {
@@ -94,6 +96,11 @@ public class PoolConnectionSettingsTest {
         System.out.println(u);
 
       }
+
+    } catch (MongoSocketOpenException mse) { // conn timeout
+      System.out.println(mse.getMessage());
+    } catch (MongoTimeoutException mtoe) {
+        System.out.println(mtoe.getMessage());
     } catch (MongoException e) {
       System.out.println(e.getMessage());
     } catch (InterruptedException e) {
